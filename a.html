@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Google Student Ambassador — Divit Aggarwal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --g-blue:#4285F4; --g-red:#EA4335; --g-yellow:#FBBC05; --g-green:#34A853;
+      --bg-1:#041026; --bg-2:#07132a; --muted:#9fb0c8; --white:#ffffff; --card:#ffffff; --text-dark:#132029;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--white);-webkit-font-smoothing:antialiased}
+
+    /* Stage */
+    .wrap{width:100%;height:100vh;display:grid;place-items:center;padding:20px}
+    .deck{width:1200px;max-width:calc(100% - 40px);height:780px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(2,6,23,0.6)}
+
+    /* Slides */
+    .slides{height:100%;display:flex;transition:transform .8s cubic-bezier(.2,.9,.2,1)}
+    .slide{flex:0 0 100%;padding:48px 64px;display:flex;flex-direction:column;justify-content:center;gap:18px;position:relative}
+    h1{margin:0;font-size:clamp(22px,3.6vw,44px);line-height:1.02}
+    p{margin:0;color:var(--muted);font-size:clamp(14px,1.2vw,18px)}
+
+    /* Controls */
+    .controls{position:absolute;right:18px;top:18px;display:flex;gap:8px;z-index:80}
+    .btn{background:rgba(255,255,255,0.06);color:var(--white);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+
+    .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;display:flex;gap:8px;z-index:80}
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.06);cursor:pointer}
+    .dot.active{background:linear-gradient(90deg,var(--g-blue),var(--g-green));box-shadow:0 6px 18px rgba(66,133,244,0.12)}
+
+    /* --- Slide 1: Opening Hook --- */
+    .s1{text-align:center;background:radial-gradient(circle at 50% 40%, rgba(66,133,244,0.06), transparent 6%), linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--white)}
+    .ring{position:absolute;width:520px;height:520px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:.08;background:conic-gradient(from 0deg,var(--g-blue),var(--g-red),var(--g-yellow),var(--g-green));filter:blur(48px)}
+    .lamp-wrap{display:grid;place-items:center;margin:0 auto 6px;width:320px;height:320px;position:relative;z-index:6}
+    .lamp{width:190px;height:190px;border-radius:50%;background:linear-gradient(135deg,var(--g-blue),var(--g-green));display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;font-size:56px;position:relative;box-shadow:0 18px 60px rgba(2,6,23,0.6);cursor:pointer}
+    .lamp .badge{position:relative;width:140px;height:140px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:36px}
+    .lamp .badge::after{content:'';position:absolute;inset:-18px;border-radius:50%;filter:blur(18px);opacity:.9;background:conic-gradient(from 120deg,var(--g-blue),var(--g-red),var(--g-yellow),var(--g-green));}
+    @keyframes lampPulse{0%{transform:scale(0.995)}50%{transform:scale(1.03)}100%{transform:scale(0.995)}}
+    .lampPulse{animation:lampPulse 2.6s ease-in-out infinite}
+    .s1 h1{color:var(--white);text-shadow:0 6px 26px rgba(0,0,0,0.6)}
+
+    /* --- Slide 2: Intro --- */
+    .s-intro{display:flex;align-items:center;justify-content:center}
+    .card{display:flex;gap:26px;align-items:center;background:var(--card);color:var(--text-dark);padding:26px;border-radius:14px;box-shadow:0 18px 40px rgba(2,6,23,0.18);width:880px}
+    .avatar-wrap{position:relative;width:190px;height:190px;border-radius:18px;display:grid;place-items:center}
+    .da-svg{width:140px;height:140px;border-radius:12px;display:grid;place-items:center}
+    .da-ring{position:absolute;inset:auto;top:6px;left:6px;right:6px;bottom:6px;border-radius:14px;filter:blur(8px);opacity:.6;background:conic-gradient(from 120deg,var(--g-blue),var(--g-red),var(--g-yellow),var(--g-green))}
+    .avatar-bounce{transform-origin:center;animation:avatarBounce .9s ease both}
+    @keyframes avatarBounce{0%{transform:translateY(-6px) scale(.98);opacity:0}60%{transform:translateY(6px) scale(1.02);opacity:1}100%{transform:translateY(0) scale(1)}}
+    .intro-text h2{margin:0;font-size:26px}
+    .intro-text p{margin-top:6px;color:var(--text-dark)}
+    .intro-list{margin-top:12px;color:var(--text-dark)}
+    .intro-list li{margin:6px 0;font-weight:600}
+
+    /* --- Slide 3: Vision Split --- */
+    .s-vision{display:flex;gap:28px;align-items:stretch}
+    .panel{flex:1;padding:20px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);min-height:300px}
+    .panel h3{margin:0 0 8px}
+    .list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .item{display:flex;gap:12px;align-items:center}
+    .item .dotSmall{width:12px;height:12px;border-radius:50%}
+
+    .arrow-mid{display:grid;place-items:center;width:92px}
+    .arrow-mid .arrow{font-size:48px;color:rgba(255,255,255,0.12);transform:translateX(-80px);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+    .arrow-mid .arrow.active{transform:translateX(0);color:var(--g-blue)}
+
+    /* --- Slide 4: Superpowers --- */
+    .s-powers{text-align:center}
+    .powers{display:flex;gap:18px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+    .power{width:260px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;opacity:0;transform:translateY(18px);transition:all .45s cubic-bezier(.2,.9,.2,1)}
+    .power.visible{opacity:1;transform:none}
+    .power .ico{font-size:40px;margin-bottom:10px}
+
+    /* --- Slide 5: Past Impact --- */
+    .s-impact{display:flex;flex-direction:column;align-items:center}
+    .timeline{width:86%;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
+    .event{display:flex;align-items:flex-start;gap:14px;padding:12px;border-radius:10px;background:rgba(0,0,0,0.06);margin:10px 0;opacity:0;transform:translateX(-12px);transition:all .45s}
+    .event.show{opacity:1;transform:none}
+
+    /* --- Slide 6: Why Google & Me --- */
+    .s-why{display:flex;gap:18px}
+    .why{flex:1;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
+    .handshake{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px}
+    .kw{opacity:0;transform:translateY(10px);transition:all .45s}
+    .kw.show{opacity:1;transform:none}
+
+    /* --- Slide 7: Roadmap --- */
+    .s-roadmap{display:flex;flex-direction:column;align-items:center}
+    .road{width:84%;margin-top:12px}
+    .level{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.06);margin-bottom:12px;opacity:0;transform:translateY(10px);transition:all .45s}
+    .level.show{opacity:1;transform:none}
+    .badge{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:white;font-weight:700}
+
+    /* --- Slide 8: Closing (enhanced visuals) --- */
+    .s-close{text-align:center;position:relative;overflow:visible}
+    .closing-visuals{position:relative;height:320px;margin-bottom:8px}
+    .sunrise{position:absolute;left:0;right:0;bottom:0;height:44%;background:radial-gradient(60% 40% at 50% 110%, rgba(255,244,214,1) 0%, rgba(255,213,92,0.9) 18%, rgba(255,170,64,0.4) 40%, transparent 70%);opacity:0;transform:translateY(18px);transition:all .9s cubic-bezier(.2,.9,.2,1);border-top-left-radius:40%;border-top-right-radius:40%;filter:blur(8px);z-index:1}
+    .sunrise.visible{opacity:1;transform:translateY(0)}
+
+    .skyline{position:absolute;left:0;right:0;bottom:8%;height:28%;z-index:2;opacity:0;transform:translateY(12px);transition:all .9s}
+    .skyline.visible{opacity:1;transform:translateY(0)}
+
+    .beams{position:absolute;left:0;right:0;bottom:22%;height:50%;z-index:3;pointer-events:none}
+    .beam{position:absolute;bottom:0;width:10px;height:0;border-radius:10px;opacity:0;transition:all .9s}
+    .beam.g1{left:18%;background:linear-gradient(to top,var(--g-blue),transparent)}
+    .beam.g2{left:34%;background:linear-gradient(to top,var(--g-red),transparent)}
+    .beam.g3{left:50%;background:linear-gradient(to top,var(--g-yellow),transparent)}
+    .beam.g4{left:66%;background:linear-gradient(to top,var(--g-green),transparent)}
+    .beam.show{height:86%;opacity:0.95}
+
+    .students{position:absolute;left:50%;transform:translateX(-50%);bottom:2%;display:flex;gap:18px;z-index:4;opacity:0;transform-origin:center;transition:all .9s}
+    .student{background:rgba(255,255,255,0.95);color:var(--text-dark);padding:8px 10px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.15);transform:translateY(10px) scale(.98);opacity:0}
+    .student.visible{transform:translateY(0) scale(1);opacity:1}
+    .students.visible{opacity:1}
+
+    .thank{font-size:clamp(22px,3.8vw,44px);font-weight:800;background:linear-gradient(90deg,var(--g-blue),var(--g-red),var(--g-yellow),var(--g-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:12px;opacity:0;transform:translateY(8px);transition:all .7s}
+    .thank.visible{opacity:1;transform:translateY(0)}
+    .contact{margin-top:10px;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:1100px){.deck{width:94vw;height:86vh}.card{flex-direction:column;text-align:center}.s-vision{flex-direction:column}.avatar-wrap{margin-bottom:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="deck" role="application" aria-label="Google Student Ambassador pitch by Divit Aggarwal">
+
+      <div class="controls" aria-hidden="false">
+        <button class="btn" id="prevBtn" title="Previous">◀</button>
+        <button class="btn" id="nextBtn" title="Next">▶</button>
+        <button class="btn" id="autoBtn" title="Auto">Auto</button>
+      </div>
+
+      <div class="slides" id="slides">
+        <!-- Slide 1 -->
+        <section class="slide s1" data-slide="1">
+          <div class="ring" aria-hidden="true"></div>
+          <div class="lamp-wrap">
+            <div class="lamp lampPulse" id="lamp">
+              <!-- restored Google-style lamp badge (SVG) -->
+              <div class="badge" aria-hidden="true">
+                <svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <defs>
+                    <linearGradient id="lg1" x1="0" x2="1">
+                      <stop offset="0" stop-color="#4285F4"/>
+                      <stop offset="0.5" stop-color="#FBBC05"/>
+                      <stop offset="1" stop-color="#34A853"/>
+                    </linearGradient>
+                    <linearGradient id="lg2" x1="0" x2="1">
+                      <stop offset="0" stop-color="#4285F4"/>
+                      <stop offset="1" stop-color="#EA4335"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- bulb shape -->
+                  <g transform="translate(0,0)">
+                    <path d="M50 10c-11 0-20 9-20 20 0 6 3 11 7 15 3 3 6 5 8 10v6h10v-6c2-5 5-7 8-10 4-4 7-9 7-15 0-11-9-20-20-20z" fill="url(#lg1)" opacity="0.98"/>
+                    <rect x="40" y="66" width="20" height="8" rx="3" fill="#2b2b2b"/>
+                    <!-- inner glow -->
+                    <circle cx="50" cy="34" r="6" fill="rgba(255,255,255,0.6)"/>
+                    <!-- stylized G letter -->
+                    <text x="50" y="46" font-family="Poppins, sans-serif" font-weight="700" font-size="26" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">G</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <h1>The world is changing faster than ever… and the ones who will shape it are not just dreamers, but doers.</h1>
+          <p>I’m ready to do both — as your next Google Student Ambassador. (Yes, I bring memes.)</p>
+        </section>
+
+        <!-- Slide 2 -->
+        <section class="slide s-intro" data-slide="2">
+          <div class="card">
+            <div class="avatar-wrap">
+              <div class="da-ring" aria-hidden></div>
+              <!-- Re-using DA badge as avatar (clean, consistent) -->
+              <div class="da-svg avatar-bounce" id="avatarSVG">
+                <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="grad1" x1="0" x2="1"><stop offset="0" stop-color="#4285F4"/><stop offset="0.6" stop-color="#EA4335"/><stop offset="1" stop-color="#FBBC05"/></linearGradient>
+                  </defs>
+                  <rect width="140" height="140" rx="18" fill="url(#grad1)" />
+                  <text x="50%" y="56%" font-family="Poppins, sans-serif" font-weight="800" font-size="46" fill="#fff" text-anchor="middle" dominant-baseline="middle">DA</text>
+                </svg>
+              </div>
+            </div>
+            <div class="intro-text">
+              <h2>Hi — I’m <strong>Divit Aggarwal</strong> 👋</h2>
+              <p>Connector · Innovator · Digital Leader · Esports Organizer</p>
+              <ul class="intro-list">
+                <li>📍 College: <strong>IITM</strong> — active in online & campus clubs</li>
+                <li>🎮 Organized online esports tournaments (<strong>500+ participants</strong>)</li>
+                <li>💡 Run workshops teaching collaboration tools & Google products</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 3 -->
+        <section class="slide s-vision" data-slide="3">
+          <div class="panel">
+            <h3 style="color:var(--g-red)">Problems — campus chaos I fix</h3>
+            <div class="list">
+              <div class="item"><span class="dotSmall" style="background:var(--g-red)"></span><div>Fragmented event info — students miss opportunities</div></div>
+              <div class="item"><span class="dotSmall" style="background:#f39c12"></span><div>Tool overload — learning curve kills momentum</div></div>
+              <div class="item"><span class="dotSmall" style="background:#9b59b6"></span><div>Events feel dry — low engagement & repeat attendance</div></div>
+              <div class="item"><span class="dotSmall" style="background:var(--g-blue)"></span><div>Mentor/partner discovery is manual and slow</div></div>
+            </div>
+          </div>
+
+          <div class="arrow-mid">
+            <div class="arrow" id="visionArrow">➜</div>
+          </div>
+
+          <div class="panel">
+            <h3 style="color:var(--g-green)">Solutions — Google-powered & playful</h3>
+            <div class="list">
+              <div class="item"><span class="dotSmall" style="background:var(--g-blue)"></span><div>Central Drive + Calendar hub with one-click RSVP</div></div>
+              <div class="item"><span class="dotSmall" style="background:var(--g-green)"></span><div>Onboarding sprints: Docs templates, Meet shortcuts</div></div>
+              <div class="item"><span class="dotSmall" style="background:var(--g-yellow)"></span><div>Gamified participation: points, leaderboards, memes</div></div>
+              <div class="item"><span class="dotSmall" style="background:var(--g-red)"></span><div>Mentor-match forms + calendar booking flow</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 4 -->
+        <section class="slide s-powers" data-slide="4">
+          <h1>My Superpowers</h1>
+          <p class="lead">Communication that connects • Creativity that hooks • Community that keeps coming back</p>
+          <div class="powers" id="powers">
+            <div class="power"><div class="ico">📣</div><strong>Communication</strong><div class="muted">Clear, enthusiastic outreach — I get people excited.</div></div>
+            <div class="power"><div class="ico">🎨</div><strong>Creativity</strong><div class="muted">Design-forward ideas that actually stick.</div></div>
+            <div class="power"><div class="ico">🤝</div><strong>Community</strong><div class="muted">I turn one-off attendees into contributors.</div></div>
+          </div>
+        </section>
+
+        <!-- Slide 5 -->
+        <section class="slide s-impact" data-slide="5">
+          <h1>Past Impact</h1>
+          <p class="lead">A few wins that show I can deliver.</p>
+          <div class="timeline">
+            <div class="event" id="e1"><div class="dot" style="background:linear-gradient(90deg,var(--g-blue),var(--g-green));width:18px;height:18px;border-radius:6px;margin-right:10px"></div><div><strong>Esports Tournaments</strong><div class="muted">Organized & streamed bracket events — 500+ players & viewers</div></div></div>
+            <div class="event" id="e2"><div class="dot" style="background:linear-gradient(90deg,var(--g-red),var(--g-yellow));width:18px;height:18px;border-radius:6px;margin-right:10px"></div><div><strong>Workshops</strong><div class="muted">Hands-on Docs/Drive/Jamboard sessions for teams</div></div></div>
+            <div class="event" id="e3"><div class="dot" style="background:linear-gradient(90deg,var(--g-blue),var(--g-red));width:18px;height:18px;border-radius:6px;margin-right:10px"></div><div><strong>Startup Collabs</strong><div class="muted">Coordinated student projects with local startups</div></div></div>
+          </div>
+        </section>
+
+        <!-- Slide 6 -->
+        <section class="slide s-why" data-slide="6">
+          <div class="why">
+            <h3>Why Google?</h3>
+            <p class="muted">Scale, trust, and tools that people already use.</p>
+            <ul style="margin-top:10px;color:var(--muted)"><li>Access to world-class tools</li><li>Platform for meaningful impact</li><li>Developer & educator resources</li></ul>
+          </div>
+          <div class="why">
+            <h3>Why Me?</h3>
+            <p class="muted">I translate these tools into delightful student experiences.</p>
+            <ul style="margin-top:10px;color:var(--muted)"><li>Proven event delivery</li><li>Engaging teaching style</li><li>Strong community network</li></ul>
+            <div class="handshake" style="margin-top:18px">
+              <div style="font-size:48px">🧑‍🎓</div>
+              <div style="font-size:48px">🤖</div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:12px;justify-content:center">
+              <div class="kw">Innovation</div>
+              <div class="kw">Inclusion</div>
+              <div class="kw">Impact</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 7 -->
+        <section class="slide s-roadmap" data-slide="7">
+          <h1>Roadmap — What I'll Do</h1>
+          <p class="lead">Awareness → Skills → Hackathons → Global Connections</p>
+          <div class="road">
+            <div class="level"><div class="badge" style="background:linear-gradient(90deg,var(--g-blue),var(--g-green))">1</div><div style="margin-left:12px"><strong>Awareness</strong><div class="muted">Campaigns, socials & centralized hubs</div></div></div>
+            <div class="level"><div class="badge" style="background:linear-gradient(90deg,var(--g-red),var(--g-yellow))">2</div><div style="margin-left:12px"><strong>Skill Workshops</strong><div class="muted">Hands-on sessions with Google tools</div></div></div>
+            <div class="level"><div class="badge" style="background:linear-gradient(90deg,var(--g-blue),var(--g-red))">3</div><div style="margin-left:12px"><strong>Hackathons</strong><div class="muted">Inclusive ideation & prizes</div></div></div>
+            <div class="level"><div class="badge" style="background:linear-gradient(90deg,var(--g-green),var(--g-blue))">4</div><div style="margin-left:12px"><strong>Global Collaboration</strong><div class="muted">Connect students to programs & internships</div></div></div>
+          </div>
+        </section>
+
+        <!-- Slide 8 -->
+        <section class="slide s-close" data-slide="8">
+          <div style="text-align:center">
+            <div class="closing-visuals">
+              <div class="sunrise" id="sunrise"></div>
+
+              <!-- simple skyline SVG -->
+              <svg class="skyline" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <g fill="#0b1220">
+                  <rect x="0" y="80" width="120" height="120"/>
+                  <rect x="140" y="60" width="80" height="140"/>
+                  <rect x="240" y="100" width="140" height="100"/>
+                  <rect x="400" y="20" width="90" height="180"/>
+                  <rect x="520" y="80" width="140" height="120"/>
+                  <rect x="700" y="48" width="110" height="152"/>
+                  <rect x="860" y="100" width="130" height="100"/>
+                  <rect x="1020" y="64" width="80" height="136"/>
+                </g>
+              </svg>
+
+              <div class="beams" aria-hidden>
+                <div class="beam g1"></div>
+                <div class="beam g2"></div>
+                <div class="beam g3"></div>
+                <div class="beam g4"></div>
+              </div>
+
+              <div class="students" id="studentsRow">
+                <div class="student">📱 Student</div>
+                <div class="student">💻 Student</div>
+                <div class="student">🎮 Student</div>
+              </div>
+            </div>
+
+            <div class="thank" id="thank">Let's make my campus a launchpad for the next generation of innovators.</div>
+            <div class="contact">I’m <strong>Divit Aggarwal</strong> · Email: <a href="mailto:diivtagarwal364@gmail.com" style="color:inherit">diivtagarwal364@gmail.com</a> · LinkedIn: <a href="https://www.linkedin.com/in/divit-aggarwal-620229234" target="_blank" style="color:inherit">linkedin.com/in/divit-aggarwal-620229234</a></div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="dots" id="dots" role="tablist" aria-label="Slides"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const slidesEl = document.getElementById('slides');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const autoBtn = document.getElementById('autoBtn');
+
+  let idx = 0; let auto = false; let timer = null;
+
+  function createDots(){ dotsEl.innerHTML=''; slides.forEach((s,i)=>{ const d=document.createElement('div'); d.className='dot'+(i===idx? ' active':''); d.setAttribute('role','tab'); d.setAttribute('aria-label', 'Slide '+(i+1)); d.onclick = ()=> go(i); dotsEl.appendChild(d); }); }
+
+  function go(i){ idx = (i + slides.length) % slides.length; slidesEl.style.transform = `translateX(${-idx*100}%)`; createDots(); cue(idx); announce(idx); }
+  function next(){ go(idx+1); }
+  function prev(){ go(idx-1); }
+
+  // Attach
+  prevBtn.addEventListener('click', ()=>{ prev(); pauseAutoTemp(); });
+  nextBtn.addEventListener('click', ()=>{ next(); pauseAutoTemp(); });
+  autoBtn.addEventListener('click', ()=>{ auto = !auto; autoBtn.textContent = auto? 'Stop':'Auto'; if(auto) startAuto(); else stopAuto(); });
+
+  function startAuto(){ timer = setInterval(()=> next(), 7000); }
+  function stopAuto(){ clearInterval(timer); timer = null; }
+  function pauseAutoTemp(){ if(auto){ stopAuto(); setTimeout(()=> startAuto(), 14000); }}
+
+  // keyboard
+  window.addEventListener('keydown', (e)=>{ if(e.code==='ArrowRight'||e.code==='Space'){ next(); pauseAutoTemp(); } if(e.code==='ArrowLeft'){ prev(); pauseAutoTemp(); } });
+
+  // Announce for screen readers
+  const live = document.createElement('div'); live.setAttribute('aria-live','polite'); live.style.position='absolute'; live.style.left='-9999px'; document.body.appendChild(live);
+  function announce(n){ const h = slides[n].querySelector('h1')||slides[n].querySelector('h3')||slides[n].querySelector('h2'); live.textContent = h? h.textContent : 'Slide '+(n+1); }
+
+  // Slide-specific animations
+  function cue(i){
+    // reset
+    document.querySelectorAll('.power').forEach(el=>el.classList.remove('visible'));
+    document.querySelectorAll('.event').forEach(el=>el.classList.remove('show'));
+    document.querySelectorAll('.kw').forEach(el=>el.classList.remove('show'));
+    document.querySelectorAll('.level').forEach(el=>el.classList.remove('show'));
+    document.querySelectorAll('.beam').forEach(el=>el.classList.remove('show'));
+    document.querySelectorAll('.arrow').forEach(el=>el.classList.remove('active'));
+
+    // Slide 1 subtle extra pulse
+    if(i===0){ const lamp = document.getElementById('lamp'); lamp.classList.add('lampPulse'); setTimeout(()=> lamp.classList.remove('lampPulse'), 5200); }
+
+    // Slide 2 avatar bounce on entry
+    if(i===1){ const av = document.getElementById('avatarSVG'); if(av){ av.classList.remove('avatar-bounce'); void av.offsetWidth; av.classList.add('avatar-bounce'); }}
+
+    // Slide 3 arrow
+    if(i===2){ setTimeout(()=> document.getElementById('visionArrow').classList.add('active'), 300); }
+
+    // Slide 4 show powers
+    if(i===3){ document.querySelectorAll('.power').forEach((p,pi)=> setTimeout(()=> p.classList.add('visible'), 200 + pi*260)); }
+
+    // Slide 5 timeline
+    if(i===4){ document.querySelectorAll('.event').forEach((e,ei)=> setTimeout(()=> e.classList.add('show'), 300 + ei*300)); }
+
+    // Slide 6 keywords
+    if(i===5){ document.querySelectorAll('.kw').forEach((k,ki)=> setTimeout(()=> k.classList.add('show'), 320 + ki*220)); }
+
+    // Slide 7 roadmap
+    if(i===6){ document.querySelectorAll('.level').forEach((l,li)=> setTimeout(()=> l.classList.add('show'), 240 + li*240)); }
+
+    // Slide 8 beams & visuals
+    if(i===7){
+      setTimeout(()=>{
+        // beams
+        document.querySelectorAll('.beam').forEach((b,bi)=> setTimeout(()=> b.classList.add('show'), bi*220));
+        // sunrise & skyline
+        const sun = document.getElementById('sunrise'); if(sun) sun.classList.add('visible');
+        const sky = document.querySelector('.skyline'); if(sky) sky.classList.add('visible');
+        // students row
+        const students = document.querySelectorAll('.student'); students.forEach((s,si)=> setTimeout(()=> s.classList.add('visible'), 500 + si*180));
+        const srow = document.getElementById('studentsRow'); if(srow) srow.classList.add('visible');
+        // thank fade
+        const th = document.getElementById('thank'); if(th) setTimeout(()=> th.classList.add('visible'), 900);
+      }, 420);
+    }
+  }
+
+  // init
+  createDots(); go(0);
+})();
+</script>
+</body>
+</html>
